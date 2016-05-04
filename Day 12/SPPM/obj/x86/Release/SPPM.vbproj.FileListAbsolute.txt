@@ -1,0 +1,15 @@
+C:\Users\jon\Desktop\sppm assignment\SPPM\bin\Release\SPPM.exe
+C:\Users\jon\Desktop\sppm assignment\SPPM\bin\Release\SPPM.pdb
+C:\Users\jon\Desktop\sppm assignment\SPPM\bin\Release\SPPM.xml
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.vbproj.ResolveComReference.cache
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.Form1.resources
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.Form2.resources
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.Form3.resources
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.LoginForm1.resources
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.Resources.resources
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.exe
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.xml
+C:\Users\jon\Desktop\sppm assignment\SPPM\obj\x86\Release\SPPM.pdb
