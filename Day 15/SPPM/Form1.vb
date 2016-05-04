@@ -1,0 +1,194 @@
+﻿Imports Excel = Microsoft.Office.Interop.Excel
+Imports System.IO
+Imports System.Runtime.InteropServices
+Public Class Form1
+
+    Public Shared App As New Excel.Application
+    Public Shared worksheet As Excel.Worksheet
+    Public Shared workbook As Excel.Workbook
+
+    Public Shared appDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+    Public Shared filePath = System.IO.Path.Combine(appDir, "temp.xls")
+    Public selRow As New DataGridViewRow
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        Dim managerdisplay As String
+        managerdisplay = ""
+        Form1.App = New Microsoft.Office.Interop.Excel.Application()
+        Form1.workbook = App.Workbooks.Open(Form1.filePath)
+
+        Form1.worksheet = workbook.Worksheets("sheet1")
+
+        Dim x As Integer
+        Dim lLastRow As Long
+        Dim dayLastRow As Long
+        Dim stock As Integer
+
+        stock = 0
+
+        With Form1.worksheet
+            'find the last row of the list
+            lLastRow = Form1.worksheet.Cells(Form1.worksheet.Rows.Count, "A").End(Excel.XlDirection.xlUp).Row
+            'shift from an extra row if list has header
+        End With
+
+        If lLastRow = 1 Then
+
+        End If
+
+        For x = 1 To lLastRow
+            managerdisplay += Form1.worksheet.Cells(x, 1).value & vbTab & Form1.worksheet.Cells(x, 2).value & vbTab & Form1.worksheet.Cells(x, 3).value & vbTab & Form1.worksheet.Cells(x, 4).value & vbNewLine
+            Form4.csvsave += Form1.worksheet.Cells(x, 1).value & "," & Form1.worksheet.Cells(x, 2).value & "," & Form1.worksheet.Cells(x, 3).value & "," & Form1.worksheet.Cells(x, 4).value & vbNewLine
+
+        Next
+
+        managerdisplay += "Sales From Lu" & vbNewLine
+        Form4.csvsave += "Sales From Lu" & vbNewLine
+
+        managerdisplay += "Dates" & vbTab & vbTab & "Total Sales" & vbTab & vbNewLine
+        Form4.csvsave += "Dates" & "," & "Total Sales" & "," & vbNewLine
+
+
+        Form1.worksheet = Form1.workbook.Worksheets("sheet3")
+
+        With Form1.worksheet
+            'find the last row of the list
+            dayLastRow = Form1.worksheet.Cells(Form1.worksheet.Rows.Count, "H").End(Excel.XlDirection.xlUp).Row
+            'shift from an extra row if list has header
+        End With
+
+        For y = 2 To dayLastRow
+
+            If String.IsNullOrEmpty(Form1.worksheet.Cells(y, 8).Value) Then
+            Else
+                managerdisplay += Form1.worksheet.Cells(y, 8).value & vbTab & vbTab & Form1.worksheet.Cells(y, 9).value & vbNewLine
+                Form4.csvsave += Form1.worksheet.Cells(y, 8).value & "," & Form1.worksheet.Cells(y, 9).value & "," & vbNewLine
+
+            End If
+
+        Next
+        Form4.RichTextBox1.Text = managerdisplay
+
+        workbook.Save()
+        workbook.Close()
+        App.Quit()
+
+        releaseObject(Form1.worksheet)
+        releaseObject(Form1.workbook)
+        releaseObject(Form1.App)
+
+
+
+        Form4.Show()
+        Me.Hide()
+
+
+    End Sub
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        
+
+        If My.Computer.FileSystem.FileExists(filePath) Then
+
+
+            Dim MyConnection As System.Data.OleDb.OleDbConnection
+            Dim DtSet As System.Data.DataSet
+            Dim MyCommand As System.Data.OleDb.OleDbDataAdapter
+            MyConnection = New System.Data.OleDb.OleDbConnection("provider=Microsoft.Jet.OLEDB.4.0;Data Source='" & filePath & "';Extended Properties=Excel 8.0;")
+            MyCommand = New System.Data.OleDb.OleDbDataAdapter("select * from [Sheet1$]", MyConnection)
+            DtSet = New System.Data.DataSet
+            MyCommand.Fill(DtSet)
+            DataGridView1.DataSource = DtSet.Tables(0)
+            MyConnection.Close()
+
+
+
+
+        Else
+
+
+
+        End If
+
+
+
+        
+
+        
+
+    End Sub
+
+    Public Sub releaseObject(ByVal obj As Object)
+        Try
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+            obj = Nothing
+        Catch ex As Exception
+            obj = Nothing
+        Finally
+            GC.Collect()
+        End Try
+    End Sub
+
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+        Form2.Show()
+        Me.Enabled = False
+
+
+
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+
+        Dim index As Integer
+
+
+
+        index = DataGridView1.SelectedRows.Item(0).Index
+
+        selRow = DataGridView1.Rows.Item(index)
+
+        DataGridView1.Rows.Remove(selRow)
+
+        index = index + 2
+
+        Form1.App = New Microsoft.Office.Interop.Excel.Application()
+        Form1.workbook = App.Workbooks.Open(Form1.filePath)
+
+        Form1.worksheet = workbook.Worksheets("sheet1")
+        Dim xlRange1 As Excel.Range = Nothing
+        xlRange1 = CType(Form1.worksheet.Rows(index), Excel.Range)
+        xlRange1.Delete()
+        Marshal.FinalReleaseComObject(xlRange1)
+        xlRange1 = Nothing
+
+        Form1.worksheet = workbook.Worksheets("sheet3")
+
+        xlRange1 = CType(Form1.worksheet.Rows(index), Excel.Range)
+        xlRange1.Delete()
+        Marshal.FinalReleaseComObject(xlRange1)
+        xlRange1 = Nothing
+
+        workbook.Save()
+        workbook.Close()
+        App.Quit()
+
+        releaseObject(Form1.worksheet)
+        releaseObject(Form1.workbook)
+        releaseObject(Form1.App)
+
+
+    End Sub
+
+    Private Sub Form1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
+
+        Button4.PerformClick()
+        LoginForm1.Enabled = True
+        LoginForm1.CancelButton.PerformClick()
+
+
+
+    End Sub
+
+End Class
